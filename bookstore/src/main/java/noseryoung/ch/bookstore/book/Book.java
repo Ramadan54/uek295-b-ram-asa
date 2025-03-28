@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Table(name = "book")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,13 +16,18 @@ import java.util.UUID;
 public class Book {
 
     @Id
-    private UUID bookId;   
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "book_id")
+    private UUID bookId;
 
+    @Column(name = "title")
     private String title;
+    @Column(name = "language")
     private String language;
-    private double price;
+    @Column(name = "price")
+    private Double price;
 
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(mappedBy = "book")
     private Set<Order> orders;
 }
