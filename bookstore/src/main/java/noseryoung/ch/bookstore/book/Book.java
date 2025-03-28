@@ -15,13 +15,13 @@ import java.util.UUID;
 public class Book {
 
     @Id
-    private UUID bookId;   // Version 4 UUID
+    private UUID bookId;   
 
     private String title;
     private String language;
     private double price;
 
-    // Many-to-Many: Die Verwaltung passiert über die "books" in Order
+
     @ManyToMany(mappedBy = "books")
     private Set<Order> orders;
 }
