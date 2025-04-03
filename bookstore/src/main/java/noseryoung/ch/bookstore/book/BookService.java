@@ -1,10 +1,8 @@
 package noseryoung.ch.bookstore.book;
 
 import lombok.RequiredArgsConstructor;
+import noseryoung.ch.bookstore.exception.BookNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -13,22 +11,15 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public Book findById(UUID id) {
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Book not found"));
     }
 
-    public Optional<Book> findById(UUID id) {
-        return bookRepository.findById(id);
-    }
-
-    public Book create(Book book) {
-        if (book.getBookId() == null) {
-            book.setBookId(UUID.randomUUID());
-        }
+    public Book createBook(Book book) {
         return bookRepository.save(book);
     }
 
-    public Book update(UUID id, Book updatedBook) {
+    public Book updateBook(UUID id, Book updatedBook) {
         return bookRepository.findById(id)
                 .map(book -> {
                     book.setTitle(updatedBook.getTitle());
@@ -36,10 +27,10 @@ public class BookService {
                     book.setPrice(updatedBook.getPrice());
                     return bookRepository.save(book);
                 })
-                .orElseThrow(() -> new RuntimeException("Book not found: " + id));
+                .orElseThrow(() -> new BookNotFoundException("Book not found"));
     }
 
-    public void delete(UUID id) {
+    public void deleteBook(UUID id) {
         bookRepository.deleteById(id);
     }
 }

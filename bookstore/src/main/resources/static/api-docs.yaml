@@ -1,0 +1,249 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /book/{bookId}:
+    get:
+      summary: Bücher anhand der ID aufrufen
+      tags:
+      - book-controller
+      operationId: getBook
+      parameters:
+      - name: bookId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Book"
+    put:
+      summary: Bücher anhand der ID updaten
+      tags:
+      - book-controller
+      operationId: updateBook
+      parameters:
+      - name: bookId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Book"
+    delete:
+      summary: Bücher anhand der ID löschen
+      tags:
+      - book-controller
+      operationId: deleteBook
+      parameters:
+      - name: bookId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Book"
+  /book/order/{orderId}:
+    get:
+      summary: Orders anhand der ID aufrufen
+      tags:
+      - book-controller
+      operationId: getOrder
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Order"
+    put:
+      summary: Orders anhand der ID updaten
+      tags:
+      - book-controller
+      operationId: updateOrder
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Order"
+    delete:
+      summary: Orders anhand der ID löschen
+      tags:
+      - book-controller
+      operationId: deleteOrder
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Order"
+  /book:
+    post:
+      summary: Bücher erstellen
+      tags:
+      - book-controller
+      operationId: addBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Book"
+  /book/order:
+    get:
+      summary: Orders filtern
+      tags:
+      - book-controller
+      operationId: searchOrders
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: comment
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: date
+        in: query
+        required: false
+        schema:
+          type: number
+          format: double
+      - name: includeBooks
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      summary: Eine Order erstellen
+      tags:
+      - book-controller
+      operationId: addOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Order"
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        bookId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        language:
+          type: string
+        price:
+          type: number
+          format: double
+        order:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/Order"
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        status:
+          type: string
+        comment:
+          type: string
+        date:
+          type: number
+          format: double
+        book:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: "#/components/schemas/Book"
